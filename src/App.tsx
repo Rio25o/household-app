@@ -15,6 +15,13 @@ import { Transaction } from "./types/index";
 import { ThemeProvider } from "@emotion/react";
 
 function App() {
+  // Firestoreエラーかどうかを判定する型ガード
+  function isFireStoreError(
+    err: unknown
+  ): err is { code: string; message: string } {
+    return typeof err === "object" && err !== null && "code" in err;
+  }
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
@@ -35,6 +42,11 @@ function App() {
         console.log(transactionsData);
         setTransactions(transactionsData);
       } catch (err) {
+        if (isFireStoreError(err)) {
+          console.error("Firestoreのエラーは：", err);
+        } else {
+          console.error("一般的なエラーは:", err);
+        }
         //error
       }
     };

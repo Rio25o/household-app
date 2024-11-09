@@ -5,8 +5,14 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { Padding } from "@mui/icons-material";
+import { Transaction } from "../types";
 
-const MonthlySummary = () => {
+interface MonthlySummaryProps {
+  monthlyTransactions: Transaction[];
+}
+
+const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
+  console.log(monthlyTransactions);
   return (
     <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
       {/* 収入 */}

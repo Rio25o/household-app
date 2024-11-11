@@ -1,13 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import FullCalendar from "@fullcalendar/react";
 import React from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import "../calender.css";
 import { EventContentArg } from "@fullcalendar/core";
+import { Balance, CalendarContent, Transaction } from "../types";
+import { calculateDailyBalances } from "../utils/financeCalculations";
+import { formatCurrency } from "../utils/formatting";
 
-const Calender = () => {
+interface CalendarProps {
+  monthlyTransactions: Transaction[];
+}
+
+const Calender = ({ monthlyTransactions }: CalendarProps) => {
   const events = [
-    { title: "Meeting", start: "2024-11-11" },
+    {
+      title: "Meeting",
+      start: "2024-11-09",
+      income: 500,
+      expense: 200,
+      balance: 300,
+    },
     {
       title: "Meeting",
       start: "2024-11-11",
@@ -16,6 +30,26 @@ const Calender = () => {
       balance: 100,
     },
   ];
+
+  const dailyBalances = calculateDailyBalances(monthlyTransactions);
+  console.log(dailyBalances);
+
+  const createCalendarEvents = (
+    dailyBalances: Record<string, Balance>
+  ): CalendarContent[] => {
+    return Object.keys(dailyBalances).map((date) => {
+      const { income, expense, balance } = dailyBalances[date];
+      return {
+        start: date,
+        income: formatCurrency(income),
+        expense: formatCurrency(expense),
+        balance: formatCurrency(balance),
+      };
+    });
+  };
+
+  const calendarEvents = createCalendarEvents(dailyBalances);
+  console.log(calendarEvents);
 
   const renderEventContent = (eventInfo: EventContentArg) => {
     console.log(eventInfo);
@@ -39,7 +73,7 @@ const Calender = () => {
       locale={jaLocale}
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"
-      events={events}
+      events={calendarEvents}
       eventContent={renderEventContent}
     />
   );

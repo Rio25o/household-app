@@ -2,6 +2,8 @@
 FROM node:22.11.0
 # 環境変数を設定
 ENV NODE_ENV=production
+ENV CHOKIDAR_USEPOLLING=true
+
 # 作業ディレクトリを設定
 WORKDIR /app
 # package.jsonとpackage-lock.jsonをコピー

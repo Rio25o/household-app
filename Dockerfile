@@ -9,8 +9,6 @@ COPY package*.json ./
 # 依存関係をインストール
 RUN npm install --only=production
 # ホットリロードを有効にするために、開発用の依存関係をインストール
-RUN npm install --only=development
-# アプリケーションコードをコピー
 COPY . .
 # アプリケーションを起動
 CMD ["npm", "start"]

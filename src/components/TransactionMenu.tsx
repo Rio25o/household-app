@@ -35,7 +35,9 @@ const TransactionMenu = () => {
       anchor={"right"}
     >
       <Stack sx={{ height: "100%" }} spacing={2}>
+        {/* {日付} */}
         <Typography fontWeight={"fontWeightBold"}>日時： 2023-12-31</Typography>
+
         <DailySummary />
         {/* 内訳タイトル&内訳追加ボタン */}
         <Box
@@ -56,6 +58,8 @@ const TransactionMenu = () => {
             内訳を追加
           </Button>
         </Box>
+
+        {/* {取引一覧} */}
         <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
           <List aria-label="取引履歴">
             <Stack spacing={2}>

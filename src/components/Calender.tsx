@@ -12,12 +12,14 @@ import { formatCurrency } from "../utils/formatting";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { Palette } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
+import { isSameMonth } from "date-fns";
 
 interface CalendarProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
   currentDay: string;
+  today: string;
 }
 
 const Calender = ({
@@ -25,6 +27,7 @@ const Calender = ({
   setCurrentMonth,
   setCurrentDay,
   currentDay,
+  today,
 }: CalendarProps) => {
   const theme = useTheme();
   // 1.各日付の収支を計算する関数(呼び出し)
@@ -83,8 +86,13 @@ const Calender = ({
 
   // 月の日付取得
   const handleDateSet = (datesetInfo: DatesSetArg) => {
-    console.log(datesetInfo);
-    setCurrentMonth(datesetInfo.view.currentStart);
+    const currentMonth = datesetInfo.view.currentStart;
+    console.log();
+    setCurrentMonth(currentMonth);
+    const todayDate = new Date();
+    if (isSameMonth(todayDate, currentMonth)) {
+      setCurrentDay(today);
+    }
   };
 
   // 日付を選択したときの処理

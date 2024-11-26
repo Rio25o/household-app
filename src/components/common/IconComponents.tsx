@@ -1,14 +1,15 @@
 import React from "react";
 import { ExpenseCategory, IncomeCategory } from "../../types";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import AlarmIcon from "@mui/icons-material/Alarm";
-import AddHomeIcon from "@mui/icons-material/AddHome";
-import Diversity3Icon from "@mui/icons-material/Diversity3";
-import SportsTennisIcon from "@mui/icons-material/SportsTennis";
-import TrainIcon from "@mui/icons-material/Train";
-import WorkIcon from "@mui/icons-material/Work";
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
-import SavingsIcon from "@mui/icons-material/Savings";
+import FastfoodIcon from "@mui/icons-material/Fastfood"; //食事アイコン
+import AlarmIcon from "@mui/icons-material/Alarm"; //用品アイコン
+import AddHomeIcon from "@mui/icons-material/AddHome"; //住居費アイコン
+import Diversity3Icon from "@mui/icons-material/Diversity3"; //交際費アイコン
+import SportsTennisIcon from "@mui/icons-material/SportsTennis"; //娯楽アイコン
+import TrainIcon from "@mui/icons-material/Train"; //交通費アイコン
+
+import WorkIcon from "@mui/icons-material/Work"; //給与アイコン
+import AddBusinessIcon from "@mui/icons-material/AddBusiness"; //副収入アイコン
+import SavingsIcon from "@mui/icons-material/Savings"; //お小遣いアイコン
 
 const IconComponents: Record<IncomeCategory | ExpenseCategory, JSX.Element> = {
   食費: <FastfoodIcon fontSize="small" />,

@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close"; // 閉じるボタン用のアイコン
 import FastfoodIcon from "@mui/icons-material/Fastfood"; //食費アイコン
 import AlarmIcon from "@mui/icons-material/Alarm"; //日用品アイコン
@@ -55,11 +55,13 @@ const TransactionForm = ({
     { label: "娯楽", icon: <SportsTennisIcon fontSize="small" /> },
     { label: "交通費", icon: <TrainIcon fontSize="small" /> },
   ];
-  const IncomeCategory: CategoryItem[] = [
+  const incomeCategory: CategoryItem[] = [
     { label: "給与", icon: <WorkIcon fontSize="small" /> },
     { label: "副収入", icon: <AddBusinessIcon fontSize="small" /> },
     { label: "お小遣い", icon: <SavingsIcon fontSize="small" /> },
   ];
+
+  const [categories, setCategories] = useState(expenseCategories);
 
   const { control, setValue, watch } = useForm({
     defaultValues: {
@@ -71,6 +73,7 @@ const TransactionForm = ({
     },
   });
 
+  // 収支タイプを切り替える関数
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue("type", type);
   };
@@ -78,6 +81,13 @@ const TransactionForm = ({
   // 収支タイプを監視
   const currentType = watch("type");
   console.log(currentType);
+
+  useEffect(() => {
+    const newCategories =
+      currentType === "expense" ? expenseCategories : incomeCategory;
+    console.log(newCategories);
+    setCategories(newCategories);
+  }, [currentType]);
 
   // 選択した日付をフォームに更新
   useEffect(() => {
@@ -176,12 +186,12 @@ const TransactionForm = ({
             control={control}
             render={({ field }) => (
               <TextField {...field} id="カテゴリ" label="カテゴリ" select>
-                <MenuItem value={"食費"}>
-                  <ListItemIcon>
-                    <FastfoodIcon />
-                  </ListItemIcon>
-                  食費
-                </MenuItem>
+                {categories.map((category) => (
+                  <MenuItem value={category.label}>
+                    <ListItemIcon>{category.icon}</ListItemIcon>
+                    {category.label}
+                  </MenuItem>
+                ))}
               </TextField>
             )}
           />

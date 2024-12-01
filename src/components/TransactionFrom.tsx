@@ -26,6 +26,8 @@ import SavingsIcon from "@mui/icons-material/Savings"; //お小遣いアイコ�
 import { Controller, useForm } from "react-hook-form";
 import { watch } from "fs";
 import { ExpenseCategory, IncomeCategory } from "../types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void;
@@ -63,7 +65,13 @@ const TransactionForm = ({
 
   const [categories, setCategories] = useState(expenseCategories);
 
-  const { control, setValue, watch } = useForm({
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -71,11 +79,17 @@ const TransactionForm = ({
       category: "",
       content: "",
     },
+    resolver: zodResolver(transactionSchema),
   });
+  console.log(errors);
 
   // 収支タイプを切り替える関数
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue("type", type);
+  };
+
+  const onSubmit = (date: any) => {
+    console.log(date);
   };
 
   // 収支タイプを監視
@@ -132,8 +146,7 @@ const TransactionForm = ({
       </Box>
 
       {/* フォーム要素 */}
-
-      <Box component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {/* 収支切り替えボタン */}
           <Controller

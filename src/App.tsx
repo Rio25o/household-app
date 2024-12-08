@@ -75,6 +75,16 @@ function App() {
       // Add a new document with a generated id.
       const docRef = await addDoc(collection(db, "Transactions"), transaction);
       console.log("Document written with ID: ", docRef.id);
+
+      const newTransaction = {
+        id: docRef.id,
+        ...transaction,
+      } as Transaction;
+      console.log(newTransaction);
+      setTransactions((prevTransaction) => [
+        ...prevTransaction,
+        newTransaction,
+      ]);
     } catch (err) {
       if (isFireStoreError(err)) {
         console.error("Firestoreのエラーは：", err);

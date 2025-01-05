@@ -73,12 +73,13 @@ const TransactionForm = ({
     watch,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<Schema>({
     defaultValues: {
       type: "expense",
       date: currentDay,
       amount: 0,
-      category: undefined,
+      category: "",
       content: "",
     },
     resolver: zodResolver(transactionSchema),
@@ -88,12 +89,21 @@ const TransactionForm = ({
   // 収支タイプを切り替える関数
   const incomeExpenseToggle = (type: IncomeExpense) => {
     setValue("type", type);
+    setValue("category", "");
   };
 
   // 送信処理
   const onSubmit: SubmitHandler<Schema> = (date) => {
     console.log(date);
     onSaveTransaction(date);
+
+    reset({
+      type: "expense",
+      date: currentDay,
+      amount: 0,
+      category: "",
+      content: "",
+    });
   };
 
   // 収支タイプを監視

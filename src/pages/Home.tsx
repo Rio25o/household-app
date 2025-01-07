@@ -35,7 +35,7 @@ const Home = ({
 
   const CloseForm = () => {
     setIsEntryDrawerOpen(!isEntryDrawerOpen);
-    setSelectedTransaction(nul
+    setSelectedTransaction(null);
   };
 
   // フォームの開閉処理(内訳追加ボタンを押したとき)

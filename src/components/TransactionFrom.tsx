@@ -25,7 +25,7 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness"; //副収入アイ
 import SavingsIcon from "@mui/icons-material/Savings"; //お小遣いアイコン
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { watch } from "fs";
-import { ExpenseCategory, IncomeCategory } from "../types";
+import { ExpenseCategory, IncomeCategory, Transaction } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Schema, transactionSchema } from "../validations/schema";
 
@@ -34,6 +34,7 @@ interface TransactionFormProps {
   isEntryDrawerOpen: boolean;
   currentDay: string;
   onSaveTransaction: (transaction: Schema) => Promise<void>;
+  selectedTransaction: Transaction | null;
 }
 
 type IncomeExpense = "income" | "expense";
@@ -48,6 +49,7 @@ const TransactionForm = ({
   isEntryDrawerOpen,
   currentDay,
   onSaveTransaction,
+  selectedTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -105,6 +107,16 @@ const TransactionForm = ({
       content: "",
     });
   };
+
+  useEffect(() => {
+    if (selectedTransaction) {
+      setValue("type", selectedTransaction.type);
+      setValue("date", selectedTransaction.date);
+      setValue("amount", selectedTransaction.amount);
+      setValue("category", selectedTransaction.category);
+      setValue("content", selectedTransaction.content);
+    }
+  }, [selectedTransaction]);
 
   // 収支タイプを監視
   const currentType = watch("type");

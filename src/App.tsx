@@ -9,7 +9,13 @@ import NoMatch from "./pages/NoMatch";
 import AppLayout from "./components/layout/AppLayout";
 import { theme } from "./theme/theme";
 import { CssBaseline } from "@mui/material";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "./firebase";
 import { Transaction } from "./types/index";
 import { ThemeProvider } from "@emotion/react";
@@ -71,7 +77,7 @@ function App() {
   });
   // 取引を保存する処理
   const handleSaveTransaction = async (transaction: Schema) => {
-    console.log(transaction);
+    // console.log(transaction);
     try {
       // firestoreにデータを保存
       // Add a new document with a generated id.
@@ -96,6 +102,19 @@ function App() {
     }
   };
 
+  const handleDeleteTransaction = async (transactionId: string) => {
+    try {
+      // firestoreのデータ削除
+      await deleteDoc(doc(db, "Transactions", transactionId));
+    } catch (err) {
+      if (isFireStoreError(err)) {
+        console.error("Firestoreのエラーは：", err);
+      } else {
+        console.error("一般的なエラーは:", err);
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -109,6 +128,7 @@ function App() {
                   monthlyTransactions={monthlyTransactions}
                   setCurrentMonth={setCurrentMonth}
                   onSaveTransaction={handleSaveTransaction}
+                  onDeleteTransaction={handleDeleteTransaction}
                 />
               }
             />

@@ -35,6 +35,7 @@ interface TransactionFormProps {
   currentDay: string;
   onSaveTransaction: (transaction: Schema) => Promise<void>;
   selectedTransaction: Transaction | null;
+  onDeleteTransaction: (transactionId: string) => Promise<void>;
 }
 
 type IncomeExpense = "income" | "expense";
@@ -50,6 +51,7 @@ const TransactionForm = ({
   currentDay,
   onSaveTransaction,
   selectedTransaction,
+  onDeleteTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -141,6 +143,12 @@ const TransactionForm = ({
   useEffect(() => {
     setValue("date", currentDay);
   }, [currentDay]);
+
+  const handleDelete = () => {
+    if (selectedTransaction) {
+      onDeleteTransaction(selectedTransaction.id);
+    }
+  };
 
   return (
     <Box
@@ -251,6 +259,7 @@ const TransactionForm = ({
               </TextField>
             )}
           />
+
           {/* 金額 */}
           <Controller
             name="amount"
@@ -293,6 +302,18 @@ const TransactionForm = ({
           >
             保存
           </Button>
+
+          {/* 削除ボタン */}
+          {selectedTransaction && (
+            <Button
+              onClick={handleDelete}
+              variant="outlined"
+              color={"secondary"}
+              fullWidth
+            >
+              削除
+            </Button>
+          )}
         </Stack>
       </Box>
     </Box>

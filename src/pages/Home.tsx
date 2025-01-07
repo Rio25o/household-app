@@ -38,11 +38,16 @@ const Home = ({
 
   const CloseForm = () => {
     setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    setSelectedTransaction(null);
   };
 
-  // フォームの開閉処理
+  // フォームの開閉処理(内訳追加ボタンを押したとき)
   const handleAddTransactionForm = () => {
-    setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    if (selectedTransaction) {
+      setSelectedTransaction(null);
+    } else {
+      setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    }
   };
 
   // 取引が選択された時の処理

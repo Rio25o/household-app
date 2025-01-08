@@ -105,6 +105,18 @@ const TransactionForm = ({
     setValue("category", "");
   };
 
+  useEffect(() => {
+    // 選択肢が更新されたか確認
+    if (selectedTransaction) {
+      const categoryExists = categories.some(
+        (category) => category.label === selectedTransaction.category
+      );
+      console.log(categories);
+      console.log(categoryExists);
+      setValue("category", categoryExists ? selectedTransaction.category : "");
+    }
+  }, [selectedTransaction, categories]);
+
   // 送信処理
   const onSubmit: SubmitHandler<Schema> = (date) => {
     console.log(date);
@@ -142,7 +154,6 @@ const TransactionForm = ({
       setValue("type", selectedTransaction.type);
       setValue("date", selectedTransaction.date);
       setValue("amount", selectedTransaction.amount);
-      setValue("category", selectedTransaction.category);
       setValue("content", selectedTransaction.content);
     } else {
       reset({

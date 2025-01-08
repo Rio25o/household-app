@@ -15,6 +15,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Transaction } from "./types/index";
@@ -101,16 +102,36 @@ function App() {
       }
     }
   };
-
+  //削除処理
   const handleDeleteTransaction = async (transactionId: string) => {
     try {
       // firestoreのデータ削除
       await deleteDoc(doc(db, "Transactions", transactionId));
+      //フロントの更新処理
       const filterdTransactions = transactions.filter(
         (transaction) => transaction.id !== transactionId
       );
       console.log(filterdTransactions);
       setTransactions(filterdTransactions);
+    } catch (err) {
+      if (isFireStoreError(err)) {
+        console.error("Firestoreのエラーは：", err);
+      } else {
+        console.error("一般的なエラーは:", err);
+      }
+    }
+  };
+
+  const handleUpdateTransaction = async (
+    transaction: Schema,
+    transactionId: string
+  ) => {
+    try {
+      //firestore更新処理
+      const docRef = doc(db, "Transactions", transactionId);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(docRef, transaction);
     } catch (err) {
       if (isFireStoreError(err)) {
         console.error("Firestoreのエラーは：", err);
@@ -134,6 +155,7 @@ function App() {
                   setCurrentMonth={setCurrentMonth}
                   onSaveTransaction={handleSaveTransaction}
                   onDeleteTransaction={handleDeleteTransaction}
+                  onUpdateTransaction={handleUpdateTransaction}
                 />
               }
             />

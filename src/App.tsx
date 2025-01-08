@@ -132,6 +132,12 @@ function App() {
 
       // Set the "capital" field of the city 'DC'
       await updateDoc(docRef, transaction);
+      //フロント更新
+      const updateTransactions = transactions.map((t) =>
+        t.id === transactionId ? { ...t, ...transaction } : t
+      ) as Transaction[];
+      console.log(updateTransactions);
+      setTransactions(updateTransactions);
     } catch (err) {
       if (isFireStoreError(err)) {
         console.error("Firestoreのエラーは：", err);

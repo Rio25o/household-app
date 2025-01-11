@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import {
   Chart as ChartJS,
@@ -9,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Transaction } from "../types";
+import { calculateDailyBalances } from "../utils/financeCalculations";
 
 ChartJS.register(
   CategoryScale,
@@ -19,7 +22,11 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = () => {
+interface BarChartProps {
+  monthlyTransactions: Transaction[];
+}
+
+const BarChart = ({ monthlyTransactions }: BarChartProps) => {
   const options = {
     maintainAspectRatio: false,
     responsive: true,
@@ -33,6 +40,17 @@ const BarChart = () => {
       },
     },
   };
+
+  const dailyBalances = calculateDailyBalances(monthlyTransactions);
+  console.log(dailyBalances);
+  console.log(monthlyTransactions);
+
+  const dateLabels = Object.keys(dailyBalances);
+  console.log(dateLabels);
+  const expenseDate = dateLabels.map((day) => dailyBalances[day].expense);
+  const incomeDate = dateLabels.map((day) => dailyBalances[day].income);
+  console.log(expenseDate);
+  console.log(incomeDate);
 
   const labels = [
     "2024-01-10",

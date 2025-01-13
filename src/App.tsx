@@ -34,6 +34,7 @@ function App() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
 
   // console.log(currentMonth);
 
@@ -64,11 +65,15 @@ function App() {
         } else {
           console.error("一般的なエラーは:", err);
         }
-        //error
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchTransactions();
   }, []);
+
+  console.log(transactions);
+  console.log(isLoading);
 
   // ひと月分のデータのみ取得
   const monthlyTransactions = transactions.filter((transaction) => {
@@ -172,6 +177,7 @@ function App() {
                   currentMonth={currentMonth}
                   setCurrentMonth={setCurrentMonth}
                   monthlyTransactions={monthlyTransactions}
+                  isLoading={isLoading}
                 />
               }
             />

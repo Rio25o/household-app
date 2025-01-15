@@ -143,7 +143,6 @@ const TransactionForm = ({
           console.error(error);
         });
     }
-
     reset({
       type: "expense",
       date: currentDay,

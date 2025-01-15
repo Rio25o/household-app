@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -100,7 +101,7 @@ const headCells: readonly HeadCell[] = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Dessert (100g serving)",
   },
   {
     id: "calories",
@@ -112,23 +113,23 @@ const headCells: readonly HeadCell[] = [
     id: "fat",
     numeric: true,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Fat (g)",
   },
   {
     id: "carbs",
     numeric: true,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "Carbs (g)",
   },
   {
     id: "protein",
     numeric: true,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "Protein (g)",
   },
 ];
 
-interface EnhancedTableProps {
+interface TransactionTableHeadProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
@@ -140,7 +141,8 @@ interface EnhancedTableProps {
   rowCount: number;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
+//テーブルヘッド
+function TransactionTableHead(props: TransactionTableHeadProps) {
   const {
     onSelectAllClick,
     order,
@@ -193,10 +195,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-interface EnhancedTableToolbarProps {
+interface TransactionTableToolbarProps {
   numSelected: number;
 }
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+
+// ツールバー
+function TransactionTableToolbar(props: TransactionTableToolbarProps) {
   const { numSelected } = props;
   return (
     <Toolbar
@@ -249,7 +253,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     </Toolbar>
   );
 }
-export default function EnhancedTable() {
+
+// 本体
+export default function TransactionTable() {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -324,14 +330,17 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {/* ツールバー */}
+        <TransactionTableToolbar numSelected={selected.length} />
+
+        {/* 取引一覧 */}
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
           >
-            <EnhancedTableHead
+            <TransactionTableHead
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -391,6 +400,8 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* テーブル下部 */}
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -401,10 +412,6 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }

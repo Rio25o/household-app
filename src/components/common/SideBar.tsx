@@ -49,7 +49,7 @@ const SideBar = ({
   };
 
   const activeLinkStyle: CSSProperties = {
-    backgroundColor: "rgba(0,0,0,0.08",
+    backgroundColor: "rgba (0,0,0,0.08)",
   };
 
   const drawer = (
@@ -71,7 +71,6 @@ const SideBar = ({
             <ListItem key={index} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                   <item.icon />
                 </ListItemIcon>
                 <ListItemText primary={item.text} />

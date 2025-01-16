@@ -175,27 +175,11 @@ function TransactionTableHead(props: TransactionTableHeadProps) {
             }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+
+        <TableCell align={"left"}>日付</TableCell>
+        <TableCell align={"left"}>カテゴリ</TableCell>
+        <TableCell align={"left"}>金額</TableCell>
+        <TableCell align={"left"}>内容</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -230,7 +214,7 @@ function TransactionTableToolbar(props: TransactionTableToolbarProps) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} 選択
         </Typography>
       ) : (
         <Typography
@@ -239,19 +223,13 @@ function TransactionTableToolbar(props: TransactionTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          月の収支
         </Typography>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -408,7 +386,7 @@ export default function TransactionTable({
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={monthlyTransactions.length}
             />
             <TableBody>
               {visibleRows.map((row, index) => {

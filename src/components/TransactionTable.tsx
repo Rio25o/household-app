@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 import { alpha, useTheme } from "@mui/material/styles";
@@ -26,6 +27,7 @@ import { financeCalculations } from "../utils/financeCalculations";
 import { Grid } from "@mui/material";
 import { title } from "process";
 import { formatCurrency } from "../utils/formatting";
+import IconComponents from "./common/IconComponents";
 
 interface Data {
   id: number;
@@ -276,7 +278,7 @@ export default function TransactionTable({
   const theme = useTheme();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
-  const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -292,16 +294,16 @@ export default function TransactionTable({
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = monthlyTransactions.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
+    let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
@@ -337,13 +339,15 @@ export default function TransactionTable({
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const visibleRows = React.useMemo(
-    () =>
-      [...rows]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage]
-  );
+  const visibleRows = React.useMemo(() => {
+    const copyMonthlyTransaction = [...monthlyTransactions];
+    return copyMonthlyTransaction.slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage
+    );
+  }, [order, orderBy, page, rowsPerPage, monthlyTransactions]);
+  console.log(rows);
+  console.log(visibleRows);
 
   const { income, expense, balance } = financeCalculations(monthlyTransactions);
   console.log({ income, expense, balance });
@@ -380,6 +384,7 @@ export default function TransactionTable({
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
           >
+            {/* テーブルヘッド */}
             <TransactionTableHead
               numSelected={selected.length}
               order={order}
@@ -388,19 +393,20 @@ export default function TransactionTable({
               onRequestSort={handleRequestSort}
               rowCount={monthlyTransactions.length}
             />
+            {/* 取引内容*/}
             <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = selected.includes(row.id);
+              {visibleRows.map((transaction, index) => {
+                const isItemSelected = selected.includes(transaction.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, transaction.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={transaction.id}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
@@ -419,12 +425,17 @@ export default function TransactionTable({
                       scope="row"
                       padding="none"
                     >
-                      {row.name}
+                      {transaction.date}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      {IconComponents[transaction.category]}
+                      {transaction.category}
+                    </TableCell>
+                    <TableCell align="left">{transaction.amount}</TableCell>
+                    <TableCell align="left">{transaction.content}</TableCell>
                   </TableRow>
                 );
               })}

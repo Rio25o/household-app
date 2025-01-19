@@ -52,6 +52,8 @@ interface TransactionFormProps {
     transactionId: string
   ) => Promise<void>;
   isMobile: boolean;
+  isDialogOpen: boolean;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type IncomeExpense = "income" | "expense";
@@ -71,6 +73,8 @@ const TransactionForm = ({
   setSelectedTransaction,
   onUpdateTransaction,
   isMobile,
+  isDialogOpen,
+  setIsDialogOpen,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -134,8 +138,11 @@ const TransactionForm = ({
     if (selectedTransaction) {
       onUpdateTransaction(date, selectedTransaction.id)
         .then(() => {
-          console.log("更新しました");
+          // console.log("更新しました");
           setSelectedTransaction(null);
+          if (isMobile) {
+            setIsDialogOpen(false);
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -158,6 +165,7 @@ const TransactionForm = ({
     });
   };
 
+  //フォーム内容を更新
   useEffect(() => {
     if (selectedTransaction) {
       setValue("type", selectedTransaction.type);
@@ -191,9 +199,14 @@ const TransactionForm = ({
     setValue("date", currentDay);
   }, [currentDay]);
 
+  //削除処理
   const handleDelete = () => {
     if (selectedTransaction) {
       onDeleteTransaction(selectedTransaction.id);
+      setSelectedTransaction(null);
+      if (isMobile) {
+        setIsDialogOpen(false);
+      }
       setSelectedTransaction(null);
     }
   };
@@ -353,7 +366,12 @@ const TransactionForm = ({
     <>
       {isMobile ? (
         //mobile
-        <Dialog open={true} fullWidth maxWidth={"sm"}>
+        <Dialog
+          open={isDialogOpen}
+          onClose={onCloseForm}
+          fullWidth
+          maxWidth={"sm"}
+        >
           <DialogContent>{formContent}</DialogContent>
         </Dialog>
       ) : (

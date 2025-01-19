@@ -122,12 +122,12 @@ function App() {
         await deleteDoc(doc(db, "Transactions", id));
       }
 
-      // //フロントの更新処理
-      // const filterdTransactions = transactions.filter(
-      //   (transaction) => transaction.id !== transactionId
-      // );
-      // console.log(filterdTransactions);
-      // setTransactions(filterdTransactions);
+      // フロントの更新処理
+      const filterdTransactions = transactions.filter(
+        (transaction) => !idsToDelete.includes(transaction.id)
+      );
+      console.log(filterdTransactions);
+      setTransactions(filterdTransactions);
     } catch (err) {
       if (isFireStoreError(err)) {
         console.error("Firestoreのエラーは：", err);

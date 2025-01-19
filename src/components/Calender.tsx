@@ -20,6 +20,7 @@ interface CalendarProps {
   setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
   currentDay: string;
   today: string;
+  onDateClick: (dateInfo: DateClickArg) => void;
 }
 
 const Calender = ({
@@ -28,6 +29,7 @@ const Calender = ({
   setCurrentDay,
   currentDay,
   today,
+  onDateClick,
 }: CalendarProps) => {
   const theme = useTheme();
   // 1.各日付の収支を計算する関数(呼び出し)
@@ -95,12 +97,6 @@ const Calender = ({
     }
   };
 
-  // 日付を選択したときの処理
-  const handleDateClick = (dateInfo: DateClickArg) => {
-    console.log(dateInfo);
-    setCurrentDay(dateInfo.dateStr);
-  };
-
   return (
     <FullCalendar
       locale={jaLocale}
@@ -109,7 +105,7 @@ const Calender = ({
       events={[...calendarEvents, backgroundEvent]}
       eventContent={renderEventContent}
       datesSet={handleDateSet}
-      dateClick={handleDateClick}
+      dateClick={onDateClick}
     />
   );
 };

@@ -8,6 +8,7 @@ import TransactionFrom from "../components/TransactionFrom";
 import { Transaction } from "../types";
 import { format } from "date-fns";
 import { Schema } from "../validations/schema";
+import { DateClickArg } from "@fullcalendar/interaction";
 
 interface HomeProps {
   monthlyTransactions: Transaction[];
@@ -35,6 +36,8 @@ const Home = ({
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   console.log(isMobile);
@@ -65,6 +68,18 @@ const Home = ({
     setSelectedTransaction(transaction);
   };
 
+  // モバイル用Drawerを閉じる処理
+  const handleCloseMobileDrawer = () => {
+    setIsMobileDrawerOpen(false);
+  };
+
+  // 日付を選択したときの処理
+  const handleDateClick = (dateInfo: DateClickArg) => {
+    console.log(dateInfo);
+    setCurrentDay(dateInfo.dateStr);
+    setIsMobileDrawerOpen(true);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       {/* 左側コンテンツ */}
@@ -76,6 +91,7 @@ const Home = ({
           setCurrentDay={setCurrentDay}
           currentDay={currentDay}
           today={today}
+          onDateClick={handleDateClick}
         />
       </Box>
       {/* 右側コンテンツ */}
@@ -86,6 +102,8 @@ const Home = ({
           onAddTransactionForm={handleAddTransactionForm}
           onSelectTransaction={handleSelectTransaction}
           isMobile={isMobile}
+          Open={isMobileDrawerOpen}
+          onClose={handleCloseMobileDrawer}
         />
         <TransactionFrom
           onCloseForm={CloseForm}

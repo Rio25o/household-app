@@ -108,16 +108,26 @@ function App() {
     }
   };
   //削除処理
-  const handleDeleteTransaction = async (transactionId: string) => {
+  const handleDeleteTransaction = async (
+    transactionIds: string | readonly string[]
+  ) => {
     try {
-      // firestoreのデータ削除
-      await deleteDoc(doc(db, "Transactions", transactionId));
-      //フロントの更新処理
-      const filterdTransactions = transactions.filter(
-        (transaction) => transaction.id !== transactionId
-      );
-      console.log(filterdTransactions);
-      setTransactions(filterdTransactions);
+      const idsToDelete = Array.isArray(transactionIds)
+        ? transactionIds
+        : [transactionIds];
+      console.log(idsToDelete);
+
+      for (const id of idsToDelete) {
+        // firestoreのデータ削除
+        await deleteDoc(doc(db, "Transactions", id));
+      }
+
+      // //フロントの更新処理
+      // const filterdTransactions = transactions.filter(
+      //   (transaction) => transaction.id !== transactionId
+      // );
+      // console.log(filterdTransactions);
+      // setTransactions(filterdTransactions);
     } catch (err) {
       if (isFireStoreError(err)) {
         console.error("Firestoreのエラーは：", err);
@@ -178,6 +188,7 @@ function App() {
                   setCurrentMonth={setCurrentMonth}
                   monthlyTransactions={monthlyTransactions}
                   isLoading={isLoading}
+                  onDeleteTransaction={handleDeleteTransaction}
                 />
               }
             />

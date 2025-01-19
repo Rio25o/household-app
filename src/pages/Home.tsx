@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import MonthlySummary from "../components/MonthlySummary";
 import Calender from "../components/Calender";
@@ -35,6 +35,9 @@ const Home = ({
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  console.log(isMobile);
 
   // 一日分のデータ
   const dailyTransactions = monthlyTransactions.filter((transaction) => {
@@ -82,6 +85,7 @@ const Home = ({
           currentDay={currentDay}
           onAddTransactionForm={handleAddTransactionForm}
           onSelectTransaction={handleSelectTransaction}
+          isMobile={isMobile}
         />
         <TransactionFrom
           onCloseForm={CloseForm}
